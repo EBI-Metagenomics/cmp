@@ -1,4 +1,4 @@
-#include "cmp_ext.h"
+#include "cmp/cmp.h"
 #include <assert.h>
 #include <limits.h>
 
