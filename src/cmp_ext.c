@@ -26,10 +26,13 @@ void cmp_setup(struct cmp_ctx_s *ctx, FILE *fp)
 
 FILE *cmp_file(struct cmp_ctx_s *ctx) { return (FILE *)ctx->buf; }
 
-bool cmp_read_str(cmp_ctx_t *ctx, char *data, uint32_t *size)
+bool cmp_read_cstr(cmp_ctx_t *ctx, char *data, uint32_t *size)
 {
-    bool r = __cmp_read_str(ctx, data, size);
-    assert(*size > 0);
+    assert(*size < UINT32_MAX);
+    /* The following fuinction requires size of the array
+     * not the size of the string (which is strlen()),
+     * even though it will write back the size of the string.
+     */
     *size += 1;
-    return r;
+    return __cmp_read_str(ctx, data, size);
 }

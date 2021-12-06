@@ -22,8 +22,10 @@ CMP_API FILE *cmp_file(struct cmp_ctx_s *ctx);
 
 /* Return a c-string.
  * data: a null-terminated string.
- * size: number of characters including the null at the end.  */
-CMP_API bool cmp_read_str(struct cmp_ctx_s *ctx, char *data, uint32_t *size);
+ * size: Maximum number of characters (not including the null one at the end)
+ * to read. It will write back the resultung number of characters (again not
+ * including the null one) read. */
+CMP_API bool cmp_read_cstr(struct cmp_ctx_s *ctx, char *data, uint32_t *size);
 
 #ifdef __cplusplus
 }
