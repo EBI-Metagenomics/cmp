@@ -294,13 +294,13 @@ bool cmp_read_bool(cmp_ctx_t *ctx, bool *b);
 bool cmp_read_bool_as_u8(cmp_ctx_t *ctx, uint8_t *b);
 
 /* Reads a string's size from the backend */
-bool cmp_read_str_size(cmp_ctx_t *ctx, uint32_t *size);
+bool __cmp_read_str_size(cmp_ctx_t *ctx, uint32_t *size);
 
 /*
  * Reads a string from the backend; according to the spec, the string's data
  * ought to be encoded using UTF-8, 
  */
-bool cmp_read_str(cmp_ctx_t *ctx, char *data, uint32_t *size);
+bool __cmp_read_str(cmp_ctx_t *ctx, char *data, uint32_t *size);
 
 /* Reads the size of packed binary data from the backend */
 bool cmp_read_bin_size(cmp_ctx_t *ctx, uint32_t *size);
