@@ -21,6 +21,16 @@ size_t cmp_write(struct cmp_ctx_s *ctx, const void *data, size_t count)
     return fwrite(data, sizeof(uint8_t), count, (FILE *)ctx->buf);
 }
 
+int cmp_fseek(struct cmp_ctx_s *ctx, int64_t offset, int whence)
+{
+    return fseeko(cmp_file(ctx), (int64_t) offset, whence);
+}
+
+int64_t cmp_ftell(struct cmp_ctx_s *ctx)
+{
+    return (int64_t)ftello(cmp_file(ctx));
+}
+
 void cmp_setup(struct cmp_ctx_s *ctx, FILE *fp)
 {
     cmp_init(ctx, fp, cmp_read, cmp_skip, cmp_write);
