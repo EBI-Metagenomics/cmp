@@ -165,9 +165,9 @@ bool M_BufferSetFile(buf_t *buf, const char *filename) {
   if ((fp = fopen(filename, "rb")) == NULL)
     return false;
 
-  fseek(fp, 0, SEEK_END);
-  length = ftell(fp);
-  fseek(fp, 0, SEEK_SET);
+  fseeko(fp, 0, SEEK_END);
+  length = (size_t) ftello(fp);
+  fseeko(fp, 0, SEEK_SET);
 
   M_BufferClear(buf);
   M_BufferEnsureTotalCapacity(buf, length);

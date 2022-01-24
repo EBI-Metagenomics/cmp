@@ -2,6 +2,9 @@
 #include <assert.h>
 #include <limits.h>
 
+static_assert(sizeof(size_t) >= 8, "64-bits offset");
+static_assert(sizeof(off_t) >= 8, "64-bits offset");
+
 bool cmp_read(struct cmp_ctx_s *ctx, void *data, size_t limit)
 {
     FILE *fp = (FILE *)ctx->buf;
@@ -10,8 +13,7 @@ bool cmp_read(struct cmp_ctx_s *ctx, void *data, size_t limit)
 
 bool cmp_skip(struct cmp_ctx_s *ctx, size_t count)
 {
-    assert(count <= ULONG_MAX);
-    return fseek((FILE *)ctx->buf, (long)count, SEEK_CUR);
+    return fseeko((FILE *)ctx->buf, (off_t)count, SEEK_CUR);
 }
 
 size_t cmp_write(struct cmp_ctx_s *ctx, const void *data, size_t count)
