@@ -6,6 +6,9 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#define __CMP_ARRSIZE(x) (sizeof(x) / sizeof(x[0]))
+#define __CMP_STRADDR(x) ((char const *)(char const(*)[__CMP_ARRSIZE(x)]){&(x)})
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -26,9 +29,13 @@ CMP_API FILE *cmp_file(struct cmp_ctx_s *ctx);
 /* Return a c-string.
  * data: a null-terminated string.
  * size: Maximum number of characters (not including the null one at the end)
- * to read. It will write back the resultung number of characters (again not
+ * to read. It will write back the resulting number of characters (again not
  * including the null one) read. */
 CMP_API bool cmp_read_cstr(struct cmp_ctx_s *ctx, char *data, uint32_t *size);
+
+#define CMP_WRITE_STR(ctx, msg) cmp_write_str(ctx, __CMP_STRADDR(msg), (uint32_t)(__CMP_ARRSIZE(msg) - 1))
+
+CMP_API bool cmp_skip_str(struct cmp_ctx_s *ctx);
 
 #ifdef __cplusplus
 }
