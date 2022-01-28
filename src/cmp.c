@@ -2331,7 +2331,7 @@ bool cmp_read_bool_as_u8(cmp_ctx_t *ctx, uint8_t *b) {
   return true;
 }
 
-bool __cmp_read_str_size(cmp_ctx_t *ctx, uint32_t *size) {
+bool cmp_read_str_size(cmp_ctx_t *ctx, uint32_t *size) {
   cmp_object_t obj;
 
   if (!cmp_read_object(ctx, &obj))
@@ -2350,13 +2350,13 @@ bool __cmp_read_str_size(cmp_ctx_t *ctx, uint32_t *size) {
   }
 }
 
-bool __cmp_read_str(cmp_ctx_t *ctx, char *data, uint32_t *size) {
+bool cmp_read_str(cmp_ctx_t *ctx, char *data, uint32_t *size) {
   uint32_t str_size = 0;
 
-  if (!__cmp_read_str_size(ctx, &str_size))
+  if (!cmp_read_str_size(ctx, &str_size))
     return false;
 
-  if (str_size >= *size) {
+  if (str_size > *size) {
     *size = str_size;
     ctx->error = STR_DATA_LENGTH_TOO_LONG_ERROR;
     return false;

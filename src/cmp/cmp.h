@@ -183,6 +183,9 @@ CMP_API bool cmp_write_u8_as_bool(cmp_ctx_t *ctx, uint8_t b);
 /*
  * Writes a string to the backend; according to the MessagePack spec, this must
  * be encoded using UTF-8, but CMP leaves that job up to the programmer.
+ * `size` is the c-string size. The null-character `'\0'` is treated as any
+ * other one as per msgpack specification. We recommend making sure there is no
+ * null-character being written to prevent confusion while reading it later on. 
  */
 CMP_API bool cmp_write_str(cmp_ctx_t *ctx, const char *data, uint32_t size);
 
@@ -294,14 +297,20 @@ CMP_API bool cmp_read_bool(cmp_ctx_t *ctx, bool *b);
  */
 CMP_API bool cmp_read_bool_as_u8(cmp_ctx_t *ctx, uint8_t *b);
 
-/* Reads a string's size from the backend */
-CMP_API bool __cmp_read_str_size(cmp_ctx_t *ctx, uint32_t *size);
+/* Reads a string's size from the backend. *size* is the c-string size
+ * (Assuming there was no null-character written to the backend!)*/
+CMP_API bool cmp_read_str_size(cmp_ctx_t *ctx, uint32_t *size);
 
 /*
  * Reads a string from the backend; according to the spec, the string's data
- * ought to be encoded using UTF-8, 
+ * ought to be *encoded* using UTF-8.
+ * The resulting string will be a c-string (i.e., null-terminated array of
+ * characters) such that `strlen(data) == *size` upon a successful call
+ * (Assuming there was no null-character written to the backend!).
+ * Make sure that `*data` is at least `*size + 1` bytes long to avoid buffer
+ * overflow.
  */
-CMP_API bool __cmp_read_str(cmp_ctx_t *ctx, char *data, uint32_t *size);
+CMP_API bool cmp_read_str(cmp_ctx_t *ctx, char *data, uint32_t *size);
 
 /* Reads the size of packed binary data from the backend */
 CMP_API bool cmp_read_bin_size(cmp_ctx_t *ctx, uint32_t *size);
